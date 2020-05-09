@@ -1,0 +1,48 @@
+name: Deploy Docker Image
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Deploy the Docker image to GitHub Package Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: artis3n/pgmodeler-container/pgmodeler
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+        registry: docker.pkg.github.com
+        tag_semver: true
+
+    - name: Deploy the Docker image to GitHub Package Registry - Latest
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: artis3n/pgmodeler-container/pgmodeler
+        username: ${{ github.actor }}
+        password: ${{ github.token }}
+        registry: docker.pkg.github.com
+        tags: "latest"
+
+    - name: Deploy the Docker image to Docker Hub
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: artis3n/pgmodeler
+        username: ${{ secrets.docker_username }}
+        password: ${{ secrets.docker_password }}
+        tag_semver: true
+    
+    - name: Deploy the Docker image to Docker Hub - Latest
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: artis3n/pgmodeler
+        username: ${{ secrets.docker_username }}
+        password: ${{ secrets.docker_password }}
+        tags: "latest"
