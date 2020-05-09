@@ -26,7 +26,7 @@ jobs:
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
           eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
           brew install dive
-          curl -fsSL https://goss.rocks/install | sh
+          curl -fsSL https://goss.rocks/install | sudo sh
 
       - name: Build image
         run: make build
