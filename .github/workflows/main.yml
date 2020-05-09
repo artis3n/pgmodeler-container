@@ -12,6 +12,16 @@ env:
   TAG: githubci
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      
+      - name: Lint Dockerfile
+        uses: brpaz/hadolint-action@eb9b96be611b84830aa1babacfb7070ecd2a8b1b # v1.1.0
+
   test:
     runs-on: ubuntu-latest
     steps:
