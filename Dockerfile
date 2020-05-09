@@ -2,7 +2,7 @@
 # https://github.com/openalpr/openalpr/issues/566#issuecomment-348205549
 FROM ubuntu:20.04
 LABEL Name="artis3n/pgmodeler"
-LABEL Version="1.0.0"
+LABEL Version="0.1.0"
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
 
 ARG INSTALLATION_ROOT=/app
