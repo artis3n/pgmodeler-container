@@ -1,0 +1,3 @@
+[submodule "pgmodeler"]
+	path = pgmodeler
+	url = git@github.com:pgmodeler/pgmodeler.git
