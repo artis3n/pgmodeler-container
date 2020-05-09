@@ -11,7 +11,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=xterm
 
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends build-essential libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default \
+    && apt-get -y install --no-install-recommends build-essential libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default qttools5-dev \
     # Slim down layer size
     && apt-get autoremove -y \
     && apt-get autoclean -y \
@@ -19,8 +19,15 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 RUN "$QMAKE_PATH" -version && pkg-config libpq --cflags --libs
 
-COPY ./pgmodeler ./pgmodeler
+# Copy project files
 RUN mkdir /app
+COPY ./pgmodeler ./pgmodeler
+COPY ./plugins ./pgmodeler/plugins
+
+# Set up non-root user
+RUN groupadd -r modeler && useradd --no-log-init -r -g modeler modeler
+RUN chown -R modeler:modeler /app && chown -R modeler:modeler /pgmodeler
+USER modeler
 
 WORKDIR /pgmodeler
 RUN "$QMAKE_PATH" -r CONFIG+=release \
@@ -31,5 +38,7 @@ RUN "$QMAKE_PATH" -r CONFIG+=release \
     pgmodeler.pro
 
 RUN make && make install
+
+ENV QT_X11_NO_MITSHM=1
 
 ENTRYPOINT ["/app/pgmodeler"]

@@ -13,12 +13,20 @@ lint:
 .PHONY: size
 size:
 	if [! -f /usr/local/bin/dive ]; then brew install dive; fi;
-	dive build -t artis3n/pgmodeler:test .
-	docker rmi artis3n/pgmodeler:test
+	dive build -t artis3n/pgmodeler:dive .
+	docker rmi artis3n/pgmodeler:dive
 
 .PHONY: test
 test:
-	dgoss run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix artis3n/pgmodeler:$${TAG:-test}
+	xhost +local:
+	docker run -it --rm -e DISPLAY=$$DISPLAY -e QT_GRAPHICSSYSTEM=native -v /tmp/.X11-unix:/tmp/.X11-unix artis3n/pgmodeler:$${TAG:-test}
+	xhost -local:
+
+.PHONY: test-edit
+test-edit:
+	xhost +local:
+	dgoss edit -it --rm -e DISPLAY=$$DISPLAY -e QT_GRAPHICSSYSTEM=native -v /tmp/.X11-unix:/tmp/.X11-unix artis3n/pgmodeler:$${TAG:-test}
+	xhost -local:
 
 .PHONY: build
 build:
@@ -26,4 +34,6 @@ build:
 
 .PHONY: run
 run:
-	docker run -it --rm -e DISPLAY=$$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix artis3n/pgmodeler:$${TAG:-latest}
+	xhost +local:
+	docker run -it --rm -e DISPLAY=$$DISPLAY -e QT_GRAPHICSSYSTEM=native -v /tmp/.X11-unix:/tmp/.X11-unix artis3n/pgmodeler:$${TAG:-latest}
+	xhost -local:

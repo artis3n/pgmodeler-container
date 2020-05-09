@@ -1,0 +1,20 @@
+file:
+  /pgmodeler:
+    exists: true
+    owner: modeler
+    group: modeler
+    filetype: directory
+  /pgmodeler/plugins:
+    exists: true
+    owner: modeler
+    group: modeler
+    filetype: directory
+  /app/pgmodeler:
+    exists: true
+    filetype: file
+    owner: modeler
+    group: modeler
+
+process:
+  pgmodeler:
+    running: true
