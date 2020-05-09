@@ -1,0 +1,45 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+env:
+  TAG: githubci
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      
+      - name: Lint Dockerfile
+        uses: brpaz/hadolint-action@eb9b96be611b84830aa1babacfb7070ecd2a8b1b # v1.1.0
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get install build-essential
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+          eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+          brew install dive
+          curl -fsSL https://goss.rocks/install | sudo sh
+
+      - name: Build image
+        run: make build
+      
+      # - name: Test the image
+      #   run: make test
