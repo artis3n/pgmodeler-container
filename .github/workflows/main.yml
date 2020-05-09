@@ -12,7 +12,7 @@ env:
   TAG: githubci
 
 jobs:
-  linter:
+  test:
     runs-on: ubuntu-latest
     steps:
 
@@ -22,7 +22,9 @@ jobs:
       
       - name: Install dependencies
         run: |
+          sudo apt-get install build-essential
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+          eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
           brew install dive
           curl -fsSL https://goss.rocks/install | sh
 
