@@ -3,10 +3,10 @@ name: Test
 on:
   pull_request:
     branches:
-      - master
+      - main
   push:
     branches:
-      - master
+      - main
 
 env:
   TAG: githubci
@@ -41,5 +41,5 @@ jobs:
       - name: Build image
         run: make build
       
-      # - name: Test the image
-      #   run: make test
+      - name: Test the image
+        run: make test
