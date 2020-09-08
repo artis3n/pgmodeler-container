@@ -50,8 +50,8 @@ In short, the steps are:
 1. Then:
 
 ```bash
-# Check to make sure your WiFi device is en1. If not, replace en1 with the appropriate device.
-IP=$(ifconfig en1 | grep inet | awk '$1=="inet" {print $2}')
+# Check to make sure your WiFi device is en0. If not, replace en0 with the appropriate device.
+IP=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')
 xhost + $IP
 docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /persistent/local/directory/for/project:/app/savedwork ghcr.io/artis3n/pgmodeler:latest
 xhost - $IP
