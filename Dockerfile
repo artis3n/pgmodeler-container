@@ -25,8 +25,10 @@ COPY ./pgmodeler ./pgmodeler
 COPY ./plugins ./pgmodeler/plugins
 
 # Set up non-root user
-RUN groupadd -r modeler && useradd --no-log-init -r -g modeler modeler
-RUN chown -R modeler:modeler /app && chown -R modeler:modeler /pgmodeler
+RUN groupadd -r modeler \
+    && useradd -m --no-log-init -u 1000 -g modeler modeler
+RUN chown -R modeler:modeler /app \
+    && chown -R modeler:modeler /pgmodeler
 USER modeler
 
 WORKDIR /pgmodeler
@@ -38,7 +40,11 @@ RUN "$QMAKE_PATH" -r CONFIG+=release \
     pgmodeler.pro
 
 RUN make && make install
+# Add persistence folder for project work
+RUN mkdir /app/savedwork \
+    && chown -R modeler:modeler /app/savedwork
 
 ENV QT_X11_NO_MITSHM=1
+ENV QT_GRAPHICSSYSTEM=native
 
 ENTRYPOINT ["/app/pgmodeler"]

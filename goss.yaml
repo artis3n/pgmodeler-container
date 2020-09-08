@@ -14,6 +14,12 @@ file:
     filetype: file
     owner: modeler
     group: modeler
+  /app/savedwork:
+    exists: true
+    filetype: directory
+  /app/savedwork/exist.txt:
+    exists: true
+    filetype: file
 
 process:
   pgmodeler:

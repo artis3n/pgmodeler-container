@@ -13,22 +13,22 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Deploy the Docker image to GitHub Package Registry
+    - name: Deploy the Docker image to GitHub Container Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: artis3n/pgmodeler-container/pgmodeler
+        name: artis3n/pgmodeler
         username: ${{ github.actor }}
-        password: ${{ github.token }}
-        registry: docker.pkg.github.com
+        password: ${{ secrets.REGISTRY_PAT }}
+        registry: ghcr.io
         tag_semver: true
 
     - name: Deploy the Docker image to GitHub Package Registry - Latest
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: artis3n/pgmodeler-container/pgmodeler
+        name: artis3n/pgmodeler
         username: ${{ github.actor }}
-        password: ${{ github.token }}
-        registry: docker.pkg.github.com
+        password: ${{ secrets.REGISTRY_PAT }}
+        registry: ghcr.io
         tags: "latest"
 
     - name: Deploy the Docker image to Docker Hub
