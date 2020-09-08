@@ -39,23 +39,31 @@ Then, while working in PGModeler, be sure to save your project files to `/app/sa
 
 ### OSX Hosts
 
-For OSX hosts, see [this article](xquartz) for installing and configuring `xquartz` to run GUI applications from a Docker container. It is from 2017 but still appears accurate on 10.15.5.
+For OSX hosts, you have to install a Linux-compatible X11 server. The most common option is [XQuartz][].
 
-In short, the steps are:
+The steps are:
 
 1. `brew cask install xquartz`
 1. `open -a XQuartz`
+    1. Ensure XQuartz is running whenever you want to run this image.
 1. XQuartz preferences -> Security -> check "Allow connections from network clients"
 1. Make sure `/usr/X11/bin` is in your PATH
-1. Then:
+1. Set your `DISPLAY` appropriately
 
 ```bash
 # Check to make sure your WiFi device is en0. If not, replace en0 with the appropriate device.
 IP=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')
-xhost + $IP
+# 'echo $IP' should show your IP address, e.g. 192.168.1.X
+export DISPLAY=$IP:0
+```
+
+Now you can run the container with the regular instructions:
+
+```bash
+xhost +local:
 docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /persistent/local/directory/for/project:/app/savedwork ghcr.io/artis3n/pgmodeler:latest
-xhost - $IP
+xhost -local:
 ```
 
 [pgmodeler repo]: https://github.com/pgmodeler/pgmodeler
-[xquartz]: https://sourabhbajaj.com/blog/2017/02/07/gui-applications-docker-mac/
+[xquartz]: https://www.xquartz.org/
