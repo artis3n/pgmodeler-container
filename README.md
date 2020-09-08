@@ -14,7 +14,7 @@ docker run -it --rm -e DISPLAY=$$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix artis3
 xhost -local:
 ```
 
-| :important: To persist your project data, be sure to mount a directory to `/app/savedwork` |
+| :exclamation: To persist your project data, be sure to mount a directory to `/app/savedwork` |
 | --- |
 
 ```bash
