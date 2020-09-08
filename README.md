@@ -22,7 +22,7 @@ Run the container:
 
 ```bash
 xhost +local:
-docker run -it --rm -e DISPLAY=$$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ghcr.io/artis3n/pgmodeler:latest
+docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ghcr.io/artis3n/pgmodeler:latest
 xhost -local:
 ```
 
@@ -31,7 +31,7 @@ xhost -local:
 
 ```bash
 xhost +local:
-docker run -it --rm -e DISPLAY=$$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /persistent/local/directory/for/project:/app/savedwork ghcr.io/artis3n/pgmodeler:$${TAG:-latest}
+docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /persistent/local/directory/for/project:/app/savedwork ghcr.io/artis3n/pgmodeler:latest
 xhost -local:
 ```
 
