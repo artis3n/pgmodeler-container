@@ -42,7 +42,7 @@ docker run -it --rm --cap-drop=all \
 ```bash
 docker run -it --rm --cap-drop=all \
     -e DISPLAY=$DISPLAY \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v $XAUTHORITY:/home/modeler/.Xauthority:ro \
     -v /persistent/local/directory/for/project:/app/savedwork \
     ghcr.io/artis3n/pgmodeler:latest
@@ -76,7 +76,7 @@ Now you can run the container with the regular instructions:
 xhost +local:
 docker run -it --rm --cap-drop=all \
     -e DISPLAY=$DISPLAY \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v /persistent/local/directory/for/project:/app/savedwork \
     ghcr.io/artis3n/pgmodeler:latest
 xhost -local:
