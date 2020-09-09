@@ -16,23 +16,36 @@ docker pull ghcr.io/artis3n/pgmodeler:latest
 docker pull artis3n/pgmodeler:latest
 ```
 
+I wrote an article explaining in detail how I set up this container to be secure.
+Check it out!
+
 ## Usage
 
-Run the container:
+First, discover the location of your `.Xauthority` file.
+See the above article for details on what we are doing here if you are not familiar and are interested.
+Then run the container (dropping all of Docker's default Linux capabilities, as they are not needed).
 
 ```bash
-xhost +local:
-docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix ghcr.io/artis3n/pgmodeler:latest
-xhost -local:
+# Locate the path to the Xauthority file on your host file system
+XAUTHORITY=$(xauth info | grep "Authority file" | awk '{ print $3 }')
+
+docker run -it --rm --cap-drop=all \
+    -e DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+    -v $XAUTHORITY:/home/modeler/.Xauthority:ro \
+    ghcr.io/artis3n/pgmodeler:latest
 ```
 
 | :exclamation: To persist your project data, be sure to mount a directory to `/app/savedwork` |
 | --- |
 
 ```bash
-xhost +local:
-docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /persistent/local/directory/for/project:/app/savedwork ghcr.io/artis3n/pgmodeler:latest
-xhost -local:
+docker run -it --rm --cap-drop=all \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v $XAUTHORITY:/home/modeler/.Xauthority:ro \
+    -v /persistent/local/directory/for/project:/app/savedwork \
+    ghcr.io/artis3n/pgmodeler:latest
 ```
 
 Then, while working in PGModeler, be sure to save your project files to `/app/savedwork`. Done!
@@ -61,7 +74,11 @@ Now you can run the container with the regular instructions:
 
 ```bash
 xhost +local:
-docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v /persistent/local/directory/for/project:/app/savedwork ghcr.io/artis3n/pgmodeler:latest
+docker run -it --rm --cap-drop=all \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v /persistent/local/directory/for/project:/app/savedwork \
+    ghcr.io/artis3n/pgmodeler:latest
 xhost -local:
 ```
 
