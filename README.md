@@ -73,13 +73,14 @@ export DISPLAY=$IP:0
 Now you can run the container with the regular instructions:
 
 ```bash
-xhost +local:
+XAUTHORITY=$(xauth info | grep "Authority file" | awk '{ print $3 }')
+
 docker run -it --rm --cap-drop=all \
     -e DISPLAY=$DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
+    -v $XAUTHORITY:/home/modeler/.Xauthority:ro \
     -v /persistent/local/directory/for/project:/app/savedwork \
     ghcr.io/artis3n/pgmodeler:latest
-xhost -local:
 ```
 
 [pgmodeler repo]: https://github.com/pgmodeler/pgmodeler

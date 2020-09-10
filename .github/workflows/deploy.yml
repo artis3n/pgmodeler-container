@@ -15,7 +15,7 @@ jobs:
       with:
         submodules: true
 
-    - name: Deploy the Docker image to GitHub Container Registry
+    - name: Deploy the Docker image to GitHub Container Registry - Semver
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: artis3n/pgmodeler
@@ -24,7 +24,7 @@ jobs:
         registry: ghcr.io
         tag_semver: true
 
-    - name: Deploy the Docker image to GitHub Package Registry - Latest
+    - name: Deploy the Docker image to GitHub Container Registry - Latest
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: artis3n/pgmodeler
@@ -33,7 +33,7 @@ jobs:
         registry: ghcr.io
         tags: "latest"
 
-    - name: Deploy the Docker image to Docker Hub
+    - name: Deploy the Docker image to Docker Hub - Semver
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: artis3n/pgmodeler

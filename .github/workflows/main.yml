@@ -37,6 +37,3 @@ jobs:
 
       - name: Build image
         run: make build
-      
-      # - name: Test the image
-      #   run: make test
