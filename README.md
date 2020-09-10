@@ -1,13 +1,13 @@
 # artis3n/pgmodeler
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/artis3n/pgmodeler-container?style=flat-square)](https://github.com/users/artis3n/packages/container/pgmodeler)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/artis3n/pgmodeler-container/Test?style=flat-square)](https://github.com/artis3n/pgmodeler-container/actions)
+![CircleCI](https://img.shields.io/circleci/build/github/artis3n/pgmodeler-container/main?style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/artis3n/pgmodeler-container?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/artis3n/pgmodeler-container?style=flat-square)
 ![GitHub followers](https://img.shields.io/github/followers/artis3n?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/artis3n?style=social)
 
-Docker image wrapping [pgmodeler/pgmodeler][pgmodeler repo]. Unlike other containers I've seen for this project, this container is **_secure by default_**. There is no `--privileged` or any capabilities passed to the container. There is a non-root user. You get the graphical interface for PGModeler and can save project files to a specified volume for persistence.
+Docker image wrapping [pgmodeler/pgmodeler][pgmodeler repo]. Unlike other containers I've seen for this project, this container is **_secure by default_**. There is no `--privileged` or any capabilities passed to the container. There is a non-root user. You don't over-expose your Xserver. You get the graphical interface for PGModeler and can save project files to a specified volume for persistence with peace of mind.
 
 Download from GitHub Container Registry or Docker Hub:
 
@@ -26,7 +26,6 @@ See the above article for details on what we are doing here if you are not famil
 Then run the container (dropping all of Docker's default Linux capabilities, as they are not needed).
 
 ```bash
-# Locate the path to the Xauthority file on your host file system
 XAUTHORITY=$(xauth info | grep "Authority file" | awk '{ print $3 }')
 
 docker run -it --rm --cap-drop=all \
@@ -40,8 +39,10 @@ docker run -it --rm --cap-drop=all \
 | --- |
 
 ```bash
+XAUTHORITY=$(xauth info | grep "Authority file" | awk '{ print $3 }')
+
 docker run -it --rm --cap-drop=all \
-    -e DISPLAY=$DISPLAY \
+    -e DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v $XAUTHORITY:/home/modeler/.Xauthority:ro \
     -v /persistent/local/directory/for/project:/app/savedwork \
@@ -65,9 +66,7 @@ The steps are:
 
 ```bash
 # Check to make sure your WiFi device is en0. If not, replace en0 with the appropriate device.
-IP=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')
-# 'echo $IP' should show your IP address, e.g. 192.168.1.X
-export DISPLAY=$IP:0
+export DISPLAY=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}'):0
 ```
 
 Now you can run the container with the regular instructions:
@@ -76,7 +75,7 @@ Now you can run the container with the regular instructions:
 XAUTHORITY=$(xauth info | grep "Authority file" | awk '{ print $3 }')
 
 docker run -it --rm --cap-drop=all \
-    -e DISPLAY=$DISPLAY \
+    -e DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v $XAUTHORITY:/home/modeler/.Xauthority:ro \
     -v /persistent/local/directory/for/project:/app/savedwork \
