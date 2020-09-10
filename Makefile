@@ -14,9 +14,11 @@ size:
 
 .PHONY: test
 test:
+	xhost +local:
 	mkdir -p /tmp/saves; touch /tmp/saves/exist.txt
-	dgoss run -it --rm -e DISPLAY --cap-drop=all -v /tmp/.X11-unix:/tmp/.X11-unix -v $$(xauth info | grep "Authority file" | awk '{ print $$3 }'):/home/modeler/.Xauthority:ro -v /tmp/saves:/app/savedwork artis3n/pgmodeler:$${TAG:-test}
+	dgoss run -it --rm -e DISPLAY --cap-drop=all -v /tmp/.X11-unix:/tmp/.X11-unix -v /tmp/saves:/app/savedwork artis3n/pgmodeler:$${TAG:-test}
 	CI=true dive artis3n/pgmodeler:$${TAG:-test}
+	xhost -local:
 
 .PHONY: test-edit
 test-edit:
