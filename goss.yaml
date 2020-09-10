@@ -1,6 +1,8 @@
 file:
   /pgmodeler:
-    exists: false
+    exists: true
+    filetype: directory
+    size: 0
   /app/pgmodeler:
     exists: true
     filetype: file
