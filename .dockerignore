@@ -1,4 +1,5 @@
 .github
+.circleci
 .gitmodules
 .hadolint.yaml
 .pre-commit-config.yaml

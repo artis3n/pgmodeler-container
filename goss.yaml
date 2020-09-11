@@ -1,14 +1,8 @@
 file:
   /pgmodeler:
     exists: true
-    owner: modeler
-    group: modeler
     filetype: directory
-  /pgmodeler/plugins:
-    exists: true
-    owner: modeler
-    group: modeler
-    filetype: directory
+    size: 0
   /app/pgmodeler:
     exists: true
     filetype: file
@@ -17,6 +11,8 @@ file:
   /app/savedwork:
     exists: true
     filetype: directory
+    owner: modeler
+    group: modeler
   /app/savedwork/exist.txt:
     exists: true
     filetype: file

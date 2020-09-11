@@ -1,0 +1,36 @@
+version: 2.1
+jobs:
+  build:
+    machine:
+      image: ubuntu-1604:202007-01
+    steps:
+      - checkout
+      - run: git submodule sync
+      - run: git submodule update --init
+      - run:
+          name: Open Xserver connections
+          command: 'xhost +local:'
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get install build-essential
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+            eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            brew install dive
+            curl -fsSL https://goss.rocks/install | sudo sh
+      - run:
+          name: Build the image
+          command: make build
+      - run:
+          name: Goss tests
+          command: make test
+      - run:
+          name: Close Xserver connections
+          command: 'xhost -local:'
+          when: always
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build

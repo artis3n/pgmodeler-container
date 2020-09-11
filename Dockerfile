@@ -17,32 +17,39 @@ RUN apt-get update \
     && apt-get autoclean -y \
     # Remove apt-get cache from the layer to reduce container size
     && rm -rf /var/lib/apt/lists/*
-RUN "$QMAKE_PATH" -version && pkg-config libpq --cflags --libs
 
 # Copy project files
-RUN mkdir /app
-COPY ./pgmodeler ./pgmodeler
-COPY ./plugins ./pgmodeler/plugins
+COPY ./pgmodeler /pgmodeler
+COPY ./plugins /pgmodeler/plugins
 
 # Set up non-root user
-RUN groupadd -r modeler \
-    && useradd -m --no-log-init -u 1000 -g modeler modeler
-RUN chown -R modeler:modeler /app \
-    && chown -R modeler:modeler /pgmodeler
-USER modeler
+RUN groupadd -g 1000 modeler \
+    && useradd -m -l -u 1000 -g modeler modeler
 
 WORKDIR /pgmodeler
-RUN "$QMAKE_PATH" -r CONFIG+=release \
-    PREFIX="$INSTALLATION_ROOT" \
-    BINDIR="$INSTALLATION_ROOT" \
-    PRIVATEBINDIR="$INSTALLATION_ROOT" \
-    PRIVATELIBDIR="$INSTALLATION_ROOT/lib" \
-    pgmodeler.pro
+RUN mkdir /app \
+    # Add persistence folder for project work
+    && mkdir /app/savedwork \
+    # Configure qmake for compilation
+    && "$QMAKE_PATH" -version \
+    && pkg-config libpq --cflags --libs \
+    && "$QMAKE_PATH" -r CONFIG+=release \
+        PREFIX="$INSTALLATION_ROOT" \
+        BINDIR="$INSTALLATION_ROOT" \
+        PRIVATEBINDIR="$INSTALLATION_ROOT" \
+        PRIVATELIBDIR="$INSTALLATION_ROOT/lib" \
+        pgmodeler.pro \
+    # Compile PgModeler - will take about 20 minutes
+    && make \
+    && make install \
+    # Clean up source code after compilation succeeds
+    # We no longer need it in the container
+    && rm -rf /pgmodeler \
+    # Make modeler user owner of the compiled app
+    && chown -R modeler:modeler /app
 
-RUN make && make install
-# Add persistence folder for project work
-RUN mkdir /app/savedwork \
-    && chown -R modeler:modeler /app/savedwork
+USER modeler
+WORKDIR /app
 
 ENV QT_X11_NO_MITSHM=1
 ENV QT_GRAPHICSSYSTEM=native
