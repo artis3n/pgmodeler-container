@@ -23,7 +23,9 @@ jobs:
           command: make build
       - run:
           name: Goss tests
-          command: make test
+          command: |
+            eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            make test
       - run:
           name: Close Xserver connections
           command: 'xhost -local:'
