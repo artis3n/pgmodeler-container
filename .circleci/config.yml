@@ -26,10 +26,6 @@ jobs:
           command: |
             eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
             make test
-      - run:
-          name: Close Xserver connections
-          command: 'xhost -local:'
-          when: always
 
 workflows:
   version: 2

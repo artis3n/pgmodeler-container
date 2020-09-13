@@ -2,5 +2,6 @@
 .circleci
 .gitmodules
 .hadolint.yaml
+.dive-ci
 .pre-commit-config.yaml
 Makefile
