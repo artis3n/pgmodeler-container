@@ -10,16 +10,19 @@ user:
 file:
   /pgmodeler:
     exists: false
+  /app:
+    exists: true
+    filetype: directory
+    owner: modeler
+    group: modeler
   /app/pgmodeler:
     exists: true
     filetype: file
     owner: modeler
     group: modeler
+  # Don't test owner/group on a mounted volume, will cause issues depending on the host
   /app/savedwork:
     exists: true
-    filetype: directory
-    owner: modeler
-    group: modeler
   /app/savedwork/exist.txt:
     exists: true
     filetype: file
