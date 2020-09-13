@@ -7,7 +7,7 @@
 ![GitHub followers](https://img.shields.io/github/followers/artis3n?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/artis3n?style=social)
 
-Docker image wrapping [pgmodeler/pgmodeler][pgmodeler repo]. Unlike other containers I've seen for this project, this container is **_secure by default_**. There is no `--privileged` or any capabilities passed to the container. There is a non-root user. You don't over-expose your Xserver. You get the graphical interface for PGModeler and can save project files to a specified volume for persistence with peace of mind.
+Docker image wrapping [pgmodeler/pgmodeler][pgmodeler repo]. Unlike other containers I've seen for this project, this container is **_secure by default_**. There is no `--privileged` or any capabilities passed to the container. There is a non-root user. You don't over-expose your Xserver. You get the graphical interface for PGModeler and can save project files to a specified volume for persistence with peace of mind. Best of all, this container is only 402 MB!
 
 Download from GitHub Container Registry or Docker Hub:
 
@@ -28,7 +28,7 @@ Then run the container (dropping all of Docker's default Linux capabilities, as 
 ```bash
 XAUTHORITY=$(xauth info | grep "Authority file" | awk '{ print $3 }')
 
-docker run -it --rm --cap-drop=all \
+docker run --rm --cap-drop=all \
     -e DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v $XAUTHORITY:/home/modeler/.Xauthority:ro \
@@ -41,7 +41,7 @@ docker run -it --rm --cap-drop=all \
 ```bash
 XAUTHORITY=$(xauth info | grep "Authority file" | awk '{ print $3 }')
 
-docker run -it --rm --cap-drop=all \
+docker run --rm --cap-drop=all \
     -e DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v $XAUTHORITY:/home/modeler/.Xauthority:ro \
@@ -74,7 +74,7 @@ Now you can run the container with the regular instructions:
 ```bash
 XAUTHORITY=$(xauth info | grep "Authority file" | awk '{ print $3 }')
 
-docker run -it --rm --cap-drop=all \
+docker run --rm --cap-drop=all \
     -e DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
     -v $XAUTHORITY:/home/modeler/.Xauthority:ro \
