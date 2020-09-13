@@ -1,9 +1,6 @@
 # Cannot use alpine because it uses musl instead of glibc and musl doesn't have "backtrace"
 # https://github.com/openalpr/openalpr/issues/566#issuecomment-348205549
-FROM ubuntu:20.04
-LABEL Name="artis3n/pgmodeler"
-LABEL Version="0.1.0"
-LABEL maintainer="Artis3n <dev@artis3nal.com>"
+FROM ubuntu:20.04 as compiler
 
 ARG INSTALLATION_ROOT=/app
 ARG QMAKE_PATH=/usr/bin/qmake
@@ -13,6 +10,7 @@ ARG TERM=xterm
 RUN apt-get update \
     && apt-get -y install --no-install-recommends build-essential libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default qttools5-dev \
     # Slim down layer size
+    # Not strictly necessary since this is a multi-stage build but hadolint would complain
     && apt-get autoremove -y \
     && apt-get autoclean -y \
     # Remove apt-get cache from the layer to reduce container size
@@ -21,10 +19,6 @@ RUN apt-get update \
 # Copy project files
 COPY ./pgmodeler /pgmodeler
 COPY ./plugins /pgmodeler/plugins
-
-# Set up non-root user
-RUN groupadd -g 1000 modeler \
-    && useradd -m -l -u 1000 -g modeler modeler
 
 WORKDIR /pgmodeler
 RUN mkdir /app \
@@ -41,11 +35,30 @@ RUN mkdir /app \
         pgmodeler.pro \
     # Compile PgModeler - will take about 20 minutes
     && make \
-    && make install \
-    # Clean up source code after compilation succeeds
-    # We no longer need it in the container
-    && rm -rf /pgmodeler \
-    # Make modeler user owner of the compiled app
+    && make install
+
+# Now that the image is compiled, we can remove most of the image size bloat
+FROM ubuntu:20.04
+LABEL Name="artis3n/pgmodeler"
+LABEL Version="1.2.0"
+LABEL maintainer="Artis3n <dev@artis3nal.com>"
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TERM=xterm
+
+RUN apt-get update \
+    && apt-get -y install --no-install-recommends libpq-dev libqt5svg5-dev libxml2 qt5-default \
+    # Slim down layer size
+    && apt-get autoremove -y \
+    && apt-get autoclean -y \
+    # Remove apt-get cache from the layer to reduce container size
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=compiler /app /app
+
+# Set up non-root user
+RUN groupadd -g 1000 modeler \
+    && useradd -m -u 1000 -g modeler modeler \
     && chown -R modeler:modeler /app
 
 USER modeler

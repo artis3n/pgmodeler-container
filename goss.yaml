@@ -1,8 +1,15 @@
+user:
+  modeler:
+    exists: true
+    uid: 1000
+    gid: 1000
+    groups:
+      - modeler
+    home: /home/modeler
+
 file:
   /pgmodeler:
-    exists: true
-    filetype: directory
-    size: 0
+    exists: false
   /app/pgmodeler:
     exists: true
     filetype: file
