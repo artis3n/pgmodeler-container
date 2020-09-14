@@ -54,12 +54,12 @@ RUN apt-get update \
     # Remove apt-get cache from the layer to reduce container size
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=compiler /app /app
-
 # Set up non-root user
 RUN groupadd -g 1000 modeler \
     && useradd -m -u 1000 -g modeler modeler \
     && chown -R modeler:modeler /app
+
+COPY --chown=modeler:modeler --from=compiler /app /app
 
 USER modeler
 WORKDIR /app

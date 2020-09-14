@@ -16,7 +16,7 @@ docker pull ghcr.io/artis3n/pgmodeler:latest
 docker pull artis3n/pgmodeler:latest
 ```
 
-I wrote an article explaining in detail how I set up this container to be secure.
+I [wrote an article][blog article] explaining in detail how I set up this container to be secure.
 Check it out!
 
 ## Usage
@@ -82,5 +82,6 @@ docker run --rm --cap-drop=all \
     ghcr.io/artis3n/pgmodeler:latest
 ```
 
+[blog article]: https://blog.artis3nal.com/2020-09-13-container-gui-app-pgmodeler/
 [pgmodeler repo]: https://github.com/pgmodeler/pgmodeler
 [xquartz]: https://www.xquartz.org/
