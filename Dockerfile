@@ -56,8 +56,7 @@ RUN apt-get update \
 
 # Set up non-root user
 RUN groupadd -g 1000 modeler \
-    && useradd -m -u 1000 -g modeler modeler \
-    && chown -R modeler:modeler /app
+    && useradd -m -u 1000 -g modeler modeler
 
 COPY --chown=modeler:modeler --from=compiler /app /app
 
