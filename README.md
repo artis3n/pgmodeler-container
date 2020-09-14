@@ -9,7 +9,7 @@
 ![GitHub followers](https://img.shields.io/github/followers/artis3n?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/artis3n?style=social)
 
-Docker image wrapping [pgmodeler/pgmodeler][pgmodeler repo]. Unlike other containers I've seen for this project, this container is **_secure by default_**. There is no `--privileged` or any capabilities passed to the container. There is a non-root user. You don't over-expose your Xserver. You get the graphical interface for PGModeler and can save project files to a specified volume for persistence with peace of mind. Best of all, this container is only 402 MB!
+Docker image wrapping [pgmodeler/pgmodeler][pgmodeler repo]. Unlike other containers I've seen for this project, this container is **_secure by default_**. There is no `--privileged` or any capabilities passed to the container. There is a non-root user. You don't over-expose your Xserver. You get the graphical interface for PGModeler and can save project files to a specified volume for persistence with peace of mind. Best of all, this container weighs just under 400 MB!
 
 Download from GitHub Container Registry or Docker Hub:
 
