@@ -1,5 +1,8 @@
 name: Snyk Container 
 on: push
+
+env:
+  IMAGE_NAME: artis3n/pgmodeler
 jobs:
   snyk:
     runs-on: ubuntu-latest
@@ -7,22 +10,38 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: true
-
-    - name: Build a Docker image
-      run: docker build -t artis3n/pgmodeler:security-scan-snyk .
+  
+    - uses: docker/setup-buildx-action@v1
+    
+    - name: Cache
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+    
+    - name: Build the Docker image
+      uses: docker/build-push-action@v2
+      with:
+        push: false
+        tags: ${{ env.IMAGE_NAME }}:security-scan-snyk
+        load: true
+        cache-from: type=local,src=/tmp/.buildx-cache
+        cache-to: type=local,dest=/tmp/.buildx-cache
 
     - name: Run Snyk to check Docker image for vulnerabilities
       # Snyk can be used to break the build when it detects vulnerabilities.
       # In this case we want to upload the issues to GitHub Code Scanning
       continue-on-error: true
-      uses: snyk/actions/docker@master
+      uses: snyk/actions/docker@0.3.0
       env:
         # In order to use the Snyk Action you will need to have a Snyk API token.
         # More details in https://github.com/snyk/actions#getting-your-snyk-token
         # or you can signup for free at https://snyk.io/login
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-        image: artis3n/pgmodeler:security-scan-snyk
+        image: ${{ env.IMAGE_NAME }}:security-scan-snyk
         args: --file=Dockerfile
 
     - name: Upload result to GitHub Code Scanning
