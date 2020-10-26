@@ -2,7 +2,7 @@ name: Snyk Container
 on: push
 
 env:
-  IMAGE_NAME: artis3n/pgmodeler
+  IMAGE_NAME: 'artis3n/pgmodeler:security-scan-snyk'
 jobs:
   snyk:
     runs-on: ubuntu-latest
@@ -22,13 +22,7 @@ jobs:
           ${{ runner.os }}-buildx-
     
     - name: Build the Docker image
-      uses: docker/build-push-action@v2
-      with:
-        push: false
-        tags: ${{ env.IMAGE_NAME }}:security-scan-snyk
-        load: true
-        cache-from: type=local,src=/tmp/.buildx-cache
-        cache-to: type=local,dest=/tmp/.buildx-cache
+      run: docker build -t ${{ env.IMAGE_NAME }} .
 
     - name: Run Snyk to check Docker image for vulnerabilities
       # Snyk can be used to break the build when it detects vulnerabilities.
@@ -41,7 +35,7 @@ jobs:
         # or you can signup for free at https://snyk.io/login
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       with:
-        image: ${{ env.IMAGE_NAME }}:security-scan-snyk
+        image: ${{ env.IMAGE_NAME }}
         args: --file=Dockerfile
 
     - name: Upload result to GitHub Code Scanning
