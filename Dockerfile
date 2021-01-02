@@ -1,6 +1,6 @@
 # Cannot use alpine because it uses musl instead of glibc and musl doesn't have "backtrace"
 # https://github.com/openalpr/openalpr/issues/566#issuecomment-348205549
-FROM ubuntu:20.04 as compiler
+FROM ubuntu:20.10 as compiler
 
 ARG INSTALLATION_ROOT=/app
 ARG QMAKE_PATH=/usr/bin/qmake
@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=xterm
 
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends build-essential libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default qttools5-dev \
+    && apt-get -y install --no-install-recommends build-essential git libboost-dev libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default qttools5-dev \
     # Slim down layer size
     # Not strictly necessary since this is a multi-stage build but hadolint would complain
     && apt-get autoremove -y \
@@ -19,6 +19,12 @@ RUN apt-get update \
 # Copy project files
 COPY ./pgmodeler /pgmodeler
 COPY ./plugins /pgmodeler/plugins
+
+# Configure the SQL-join graphical query builder plugin
+WORKDIR /pgmodeler/plugins/graphicalquerybuilder
+RUN ./setup.sh paal \
+    && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ graphicalquerybuilder.conf \
+    && sed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ graphicalquerybuilder.conf
 
 WORKDIR /pgmodeler
 RUN mkdir /app \
@@ -34,11 +40,11 @@ RUN mkdir /app \
         PRIVATELIBDIR="$INSTALLATION_ROOT/lib" \
         pgmodeler.pro \
     # Compile PgModeler - will take about 20 minutes
-    && make \
+    && make -j"$(nproc)" \
     && make install
 
 # Now that the image is compiled, we can remove most of the image size bloat
-FROM ubuntu:20.04
+FROM ubuntu:20.10
 LABEL Name="artis3n/pgmodeler"
 LABEL Version="1.2.1"
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
