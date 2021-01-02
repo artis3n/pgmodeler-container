@@ -40,7 +40,7 @@ RUN mkdir /app \
         PRIVATELIBDIR="$INSTALLATION_ROOT/lib" \
         pgmodeler.pro \
     # Compile PgModeler - will take about 20 minutes
-    && make -j$(nproc) \
+    && make -j"$(nproc)" \
     && make install
 
 # Now that the image is compiled, we can remove most of the image size bloat
