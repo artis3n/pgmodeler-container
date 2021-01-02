@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=xterm
 
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends build-essential libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default qttools5-dev \
+    && apt-get -y install --no-install-recommends build-essential libbost-dev libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default qttools5-dev \
     # Slim down layer size
     # Not strictly necessary since this is a multi-stage build but hadolint would complain
     && apt-get autoremove -y \
@@ -21,6 +21,10 @@ COPY ./pgmodeler /pgmodeler
 COPY ./plugins /pgmodeler/plugins
 
 WORKDIR /pgmodeler
+# Configure the SQL-join graphical query builder plugin
+RUN cd plugins/graphicalquerybuilder && ./setup.sh paal && cd - \
+    && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ plugins/graphicalquerybuilder/graphicalquerybuilder.conf \
+    && ed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ plugins/graphicalquerybuilder/graphicalquerybuilder.conf
 RUN mkdir /app \
     # Add persistence folder for project work
     && mkdir /app/savedwork \
@@ -34,7 +38,7 @@ RUN mkdir /app \
         PRIVATELIBDIR="$INSTALLATION_ROOT/lib" \
         pgmodeler.pro \
     # Compile PgModeler - will take about 20 minutes
-    && make \
+    && make -j$(nproc) \
     && make install
 
 # Now that the image is compiled, we can remove most of the image size bloat
