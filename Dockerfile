@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG TERM=xterm
 
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends build-essential libboost-dev libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default qttools5-dev \
+    && apt-get -y install --no-install-recommends build-essential git libboost-dev libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default qttools5-dev \
     # Slim down layer size
     # Not strictly necessary since this is a multi-stage build but hadolint would complain
     && apt-get autoremove -y \
@@ -20,11 +20,13 @@ RUN apt-get update \
 COPY ./pgmodeler /pgmodeler
 COPY ./plugins /pgmodeler/plugins
 
-WORKDIR /pgmodeler
 # Configure the SQL-join graphical query builder plugin
-RUN cd plugins/graphicalquerybuilder && ./setup.sh paal && cd - \
-    && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ plugins/graphicalquerybuilder/graphicalquerybuilder.conf \
-    && ed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ plugins/graphicalquerybuilder/graphicalquerybuilder.conf
+WORKDIR /pgmodeler/plugins/graphicalquerybuilder
+RUN ls -la /pgmodeler/plugins/graphicalquerybuilder && ./setup.sh paal \
+    && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ graphicalquerybuilder.conf \
+    && sed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ graphicalquerybuilder.conf
+
+WORKDIR /pgmodeler
 RUN mkdir /app \
     # Add persistence folder for project work
     && mkdir /app/savedwork \
