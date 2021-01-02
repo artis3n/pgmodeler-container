@@ -22,7 +22,7 @@ COPY ./plugins /pgmodeler/plugins
 
 # Configure the SQL-join graphical query builder plugin
 WORKDIR /pgmodeler/plugins/graphicalquerybuilder
-RUN ls -la /pgmodeler/plugins/graphicalquerybuilder && ./setup.sh paal \
+RUN ./setup.sh paal \
     && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ graphicalquerybuilder.conf \
     && sed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ graphicalquerybuilder.conf
 
