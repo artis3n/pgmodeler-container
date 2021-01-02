@@ -20,7 +20,7 @@ jobs:
             curl -fsSL https://goss.rocks/install | sudo sh
       - run:
           name: Build the image
-          command: make build
+          command: make build-ci
       - run:
           name: Goss tests
           command: |

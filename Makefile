@@ -27,7 +27,11 @@ test-edit:
 
 .PHONY: build
 build:
-	docker build . -t artis3n/pgmodeler:$${TAG:-test}
+	DOCKER_BUILDKIT=1 docker build . -t artis3n/pgmodeler:$${TAG:-test}
+
+.PHONY: build-ci
+build-ci:
+	DOCKER_BUILDKIT=1 docker build --progress plain . -t artis3n/pgmodeler:$${TAG:-test}
 
 .PHONY: run
 run:
