@@ -17,4 +17,4 @@ jobs:
           submodules: true
       
       - name: Lint Dockerfile
-        uses: brpaz/hadolint-action@473e36ba306c199243ffe4f1e652a8b60a8fa296 # v1.3.1
+        uses: brpaz/hadolint-action@473e36ba306c199243ffe4f1e652a8b60a8fa296 # v1.4.0
