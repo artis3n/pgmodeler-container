@@ -5,10 +5,19 @@ FROM ubuntu:20.10 as compiler
 ARG INSTALLATION_ROOT=/app
 ARG QMAKE_PATH=/usr/bin/qmake
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TERM=xterm
 
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends build-essential git libboost-dev libpq-dev libqt5svg5-dev libxml2 libxml2-dev pkg-config qt5-default qttools5-dev \
+    && apt-get -y install --no-install-recommends \
+        build-essential \
+        git \
+        libboost-dev \
+        libpq-dev \
+        libqt5svg5-dev \
+        libxml2 \
+        libxml2-dev \
+        pkg-config \
+        qt5-default \
+        qttools5-dev \
     # Slim down layer size
     # Not strictly necessary since this is a multi-stage build but hadolint would complain
     && apt-get autoremove -y \
@@ -20,11 +29,14 @@ RUN apt-get update \
 COPY ./pgmodeler /pgmodeler
 COPY ./plugins /pgmodeler/plugins
 
+# fatal: unable to access 'http://siekiera.mimuw.edu.pl:8082/paal/': Failed to connect to siekiera.mimuw.edu.pl port 8082: Connection timed out
+# https://github.com/pgmodeler/plugins/issues/16
+#
 # Configure the SQL-join graphical query builder plugin
-WORKDIR /pgmodeler/plugins/graphicalquerybuilder
-RUN ./setup.sh paal \
-    && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ graphicalquerybuilder.conf \
-    && sed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ graphicalquerybuilder.conf
+# WORKDIR /pgmodeler/plugins/graphicalquerybuilder
+# RUN ./setup.sh paal \
+#     && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ graphicalquerybuilder.conf \
+#     && sed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ graphicalquerybuilder.conf
 
 WORKDIR /pgmodeler
 RUN mkdir /app \
@@ -45,15 +57,18 @@ RUN mkdir /app \
 
 # Now that the image is compiled, we can remove most of the image size bloat
 FROM ubuntu:20.10 as app
-LABEL Name="artis3n/pgmodeler"
-LABEL Version="1.3.1"
+LABEL name="artis3n/pgmodeler"
+LABEL version="1.3.1"
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TERM=xterm
 
 RUN apt-get update \
-    && apt-get -y install --no-install-recommends libpq-dev libqt5svg5-dev libxml2 qt5-default \
+    && apt-get -y install --no-install-recommends \
+        libpq-dev \
+        libqt5svg5-dev \
+        libxml2 \
+        qt5-default \
     # Slim down layer size
     && apt-get autoremove -y \
     && apt-get autoclean -y \
