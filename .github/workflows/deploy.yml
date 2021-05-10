@@ -38,7 +38,7 @@ jobs:
 
     - name: Docker meta
       id: docker_meta
-      uses: crazy-max/ghaction-docker-meta@v2.3.0
+      uses: crazy-max/ghaction-docker-meta@v2.5.0
       with:
         images: ghcr.io/artis3n/pgmodeler-container
         tag-latest: true
