@@ -3,7 +3,7 @@ jobs:
   build:
     machine:
       # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2004:202104-01
     steps:
       - checkout
       - run: git submodule sync
@@ -17,6 +17,7 @@ jobs:
             sudo apt-get install build-essential
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
             eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            brew update
             brew install dive
             curl -fsSL https://goss.rocks/install | sudo sh
       - run:
