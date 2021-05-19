@@ -17,7 +17,6 @@ jobs:
             sudo apt-get install build-essential
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
             eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-            brew update
             brew install dive
             curl -fsSL https://goss.rocks/install | sudo sh
       - run:
