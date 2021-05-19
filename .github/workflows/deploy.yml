@@ -40,7 +40,7 @@ jobs:
       id: docker_meta
       uses: crazy-max/ghaction-docker-meta@v2.3.0
       with:
-        images: ghcr.io/artis3n/pgmodeler-container
+        images: ghcr.io/artis3n/pgmodeler
         tag-latest: true
         tag-sha: true
         tag-semver: |
