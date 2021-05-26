@@ -3,7 +3,7 @@ jobs:
   build:
     machine:
       # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2004:202104-01
     steps:
       - checkout
       - run: git submodule sync
