@@ -40,7 +40,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v3.3.0
       with:
-        image: ghcr.io/artis3n/pgmodeler
+        images: ghcr.io/artis3n/pgmodeler
         tags: |
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
