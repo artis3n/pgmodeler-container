@@ -1,6 +1,6 @@
 # Cannot use alpine because it uses musl instead of glibc and musl doesn't have "backtrace"
 # https://github.com/openalpr/openalpr/issues/566#issuecomment-348205549
-FROM ubuntu:20.10 as compiler
+FROM ubuntu:22.04 as compiler
 
 ARG INSTALLATION_ROOT=/app
 ARG QMAKE_PATH=/usr/bin/qmake
@@ -56,7 +56,7 @@ RUN mkdir /app \
     && make install
 
 # Now that the image is compiled, we can remove most of the image size bloat
-FROM ubuntu:20.10 as app
+FROM ubuntu:22.04 as app
 LABEL name="artis3n/pgmodeler"
 LABEL version="1.4.0"
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
