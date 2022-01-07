@@ -11,11 +11,10 @@
 
 Docker image wrapping [pgmodeler/pgmodeler][pgmodeler repo]. Unlike other containers I've seen for this project, this container is **_secure by default_**. There is no `--privileged` or any capabilities passed to the container. There is a non-root user. You don't over-expose your Xserver. You get the graphical interface for PGModeler and can save project files to a specified volume for persistence with peace of mind. Best of all, this container weighs just under 400 MB!
 
-Download from GitHub Container Registry or Docker Hub:
+Download from GitHub Container Registry:
 
 ```bash
 docker pull ghcr.io/artis3n/pgmodeler:latest
-docker pull artis3n/pgmodeler:latest
 ```
 
 I [wrote an article][blog article] explaining in detail how I set up this container to be secure.
@@ -59,7 +58,7 @@ For OSX hosts, you have to install a Linux-compatible X11 server. The most commo
 
 The steps are:
 
-1. `brew cask install xquartz`
+1. `brew install xauth; brew install --cask xquartz`
 1. `open -a XQuartz`
     1. Ensure XQuartz is running whenever you want to run this image.
 1. XQuartz preferences -> Security -> check "Allow connections from network clients"

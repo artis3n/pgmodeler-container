@@ -1,6 +1,6 @@
 [submodule "pgmodeler"]
 	path = pgmodeler
-	url = git@github.com:pgmodeler/pgmodeler.git
+	url = https://github.com/pgmodeler/pgmodeler.git
 
 [submodule "plugins"]
 	path = plugins
