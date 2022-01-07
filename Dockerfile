@@ -31,11 +31,14 @@ RUN apt-get update \
 COPY ./pgmodeler /pgmodeler
 COPY ./plugins /pgmodeler/plugins
 
+# fatal: unable to access 'http://siekiera.mimuw.edu.pl:8082/paal/': Failed to connect to siekiera.mimuw.edu.pl port 8082: Connection timed out
+# https://github.com/pgmodeler/plugins/issues/16
+#
 # Configure the SQL-join graphical query builder plugin
-WORKDIR /pgmodeler/plugins/graphicalquerybuilder
-RUN ./setup.sh paal \
-    && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ graphicalquerybuilder.conf \
-    && sed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ graphicalquerybuilder.conf
+#WORKDIR /pgmodeler/plugins/graphicalquerybuilder
+#RUN ./setup.sh paal \
+#    && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ graphicalquerybuilder.conf \
+#    && sed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ graphicalquerybuilder.conf
 
 WORKDIR /pgmodeler
 RUN mkdir /app \
@@ -45,7 +48,7 @@ RUN mkdir /app \
     && "$QMAKE_PATH" -version \
     && pkg-config libpq --cflags --libs \
     && "$QMAKE_PATH" -r \
-        CONFIG+=INTERACTIVE_QMAKE \
+#        CONFIG+=INTERACTIVE_QMAKE \
         CONFIG+=release \
         PREFIX="$INSTALLATION_ROOT" \
         BINDIR="$INSTALLATION_ROOT" \
