@@ -21,7 +21,7 @@ jobs:
             curl -fsSL https://goss.rocks/install | sudo sh
       - run:
           name: Build the image
-          command: make build-ci
+          command: DOCKER_BUILDKIT=1 make build-ci
       - run:
           name: Lint
           command: make lint
