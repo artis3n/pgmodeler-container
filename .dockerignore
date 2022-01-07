@@ -1,6 +1,7 @@
 .github
 .circleci
 .gitmodules
+.idea
 .hadolint.yaml
 .dive-ci
 .pre-commit-config.yaml

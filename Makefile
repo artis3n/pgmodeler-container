@@ -6,7 +6,7 @@ install:
 
 .PHONY: lint
 lint:
-	docker run --rm -i hadolint/hadolint hadolint --ignore DL3008 - < Dockerfile
+	hadolint --ignore DL3008 Dockerfile
 
 .PHONY: size
 size:
@@ -27,11 +27,11 @@ test-edit:
 
 .PHONY: build
 build:
-	DOCKER_BUILDKIT=1 docker build . -t artis3n/pgmodeler:$${TAG:-test}
+	docker build . -t artis3n/pgmodeler:$${TAG:-test}
 
 .PHONY: build-ci
 build-ci:
-	DOCKER_BUILDKIT=1 docker build --progress plain . -t artis3n/pgmodeler:$${TAG:-test}
+	docker build --progress plain . -t artis3n/pgmodeler:$${TAG:-test}
 
 .PHONY: run
 run:
