@@ -24,7 +24,9 @@ jobs:
           command: DOCKER_BUILDKIT=1 make build-ci
       - run:
           name: Lint
-          command: make lint
+          command: |
+            eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            make lint
       - run:
           name: Goss tests
           command: |
