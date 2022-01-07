@@ -61,8 +61,6 @@ RUN mkdir /app \
 
 # Now that the image is compiled, we can remove most of the image size bloat
 FROM ubuntu:21.04 as app
-LABEL name="artis3n/pgmodeler"
-LABEL version="1.5.0"
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
