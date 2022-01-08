@@ -2,8 +2,6 @@
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/artis3n/pgmodeler-container?style=flat-square)](https://github.com/users/artis3n/packages/container/pgmodeler)
 ![CircleCI](https://img.shields.io/circleci/build/github/artis3n/pgmodeler-container/main?style=flat-square)
-[![Docker Pulls](https://img.shields.io/docker/pulls/artis3n/pgmodeler?style=flat-square)](https://hub.docker.com/r/artis3n/pgmodeler)
-![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/artis3n/pgmodeler?label=image%20size%20%28compressed%29&style=flat-square)
 ![GitHub last commit](https://img.shields.io/github/last-commit/artis3n/pgmodeler-container?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/artis3n/pgmodeler-container?style=flat-square)
 ![GitHub followers](https://img.shields.io/github/followers/artis3n?style=social)
@@ -62,8 +60,9 @@ The steps are:
 1. `open -a XQuartz`
     1. Ensure XQuartz is running whenever you want to run this image.
 1. XQuartz preferences -> Security -> check "Allow connections from network clients"
-1. Make sure `/usr/X11/bin` is in your PATH
 1. Set your `DISPLAY` appropriately
+
+Note that after changing XQuartz's preferences, you will need to quit and re-open XQuartz for the changes to take effect.
 
 ```bash
 # Check to make sure your WiFi device is en0. If not, replace en0 with the appropriate device.
@@ -83,6 +82,6 @@ docker run --rm --cap-drop=all \
     ghcr.io/artis3n/pgmodeler:latest
 ```
 
-[blog article]: https://blog.artis3nal.com/2020-09-13-container-gui-app-pgmodeler/
+[blog article]: https://blog.artis3nal.com/blog/container-gui-app-pgmodeler
 [pgmodeler repo]: https://github.com/pgmodeler/pgmodeler
 [xquartz]: https://www.xquartz.org/
