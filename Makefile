@@ -2,11 +2,11 @@
 
 .PHONY: install
 install:
-	git submodule init && git submodule update --remote
+	git submodule update --init --recursive
 
 .PHONY: lint
 lint:
-	hadolint --ignore DL3008 Dockerfile
+	hadolint Dockerfile
 
 .PHONY: size
 size:
