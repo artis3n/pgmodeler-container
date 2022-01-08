@@ -6,7 +6,7 @@ install:
 
 .PHONY: lint
 lint:
-	hadolint --ignore DL3008 Dockerfile
+	hadolint Dockerfile
 
 .PHONY: size
 size:
