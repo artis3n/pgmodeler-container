@@ -1,6 +1,7 @@
 # Cannot use alpine because it uses musl instead of glibc and musl doesn't have "backtrace"
 # https://github.com/openalpr/openalpr/issues/566#issuecomment-348205549
 FROM ubuntu:21.04 as compiler
+LABEL maintainer="Artis3n <dev@artis3nal.com>"
 
 ARG INSTALLATION_ROOT=/app
 ARG QMAKE_PATH=/usr/bin/qmake
@@ -31,14 +32,11 @@ RUN apt-get update \
 COPY ./pgmodeler /pgmodeler
 COPY ./plugins /pgmodeler/plugins
 
-# fatal: unable to access 'http://siekiera.mimuw.edu.pl:8082/paal/': Failed to connect to siekiera.mimuw.edu.pl port 8082: Connection timed out
-# https://github.com/pgmodeler/plugins/issues/16
-#
 # Configure the SQL-join graphical query builder plugin
-#WORKDIR /pgmodeler/plugins/graphicalquerybuilder
-#RUN ./setup.sh paal \
-#    && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ graphicalquerybuilder.conf \
-#    && sed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ graphicalquerybuilder.conf
+WORKDIR /pgmodeler/plugins/graphicalquerybuilder
+RUN ./setup.sh paal \
+   && sed -i.bak s/GQB_JOIN_SOLVER=\"n\"/GQB_JOIN_SOLVER=\"y\"/ graphicalquerybuilder.conf \
+   && sed -i.bak s/BOOST_INSTALLED=\"n\"/BOOST_INSTALLED=\"y\"/ graphicalquerybuilder.conf
 
 WORKDIR /pgmodeler
 RUN mkdir /app \
