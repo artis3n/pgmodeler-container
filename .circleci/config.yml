@@ -2,8 +2,8 @@ version: 2.1
 jobs:
   build:
     machine:
-      # https://circleci.com/docs/2.0/configuration-reference/#available-machine-images
-      image: ubuntu-2004:202201-01
+      # https://circleci.com/docs/configuration-reference#available-linux-machine-images
+      image: ubuntu-2204:2022.07.1
     steps:
       - checkout
       - run: git submodule sync
@@ -21,7 +21,7 @@ jobs:
             curl -fsSL https://goss.rocks/install | sudo sh
       - run:
           name: Build the image
-          command: DOCKER_BUILDKIT=1 make build-ci
+          command: make build-ci
       - run:
           name: Lint
           command: |
