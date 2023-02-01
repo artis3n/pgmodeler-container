@@ -1,6 +1,6 @@
 # Cannot use alpine because it uses musl instead of glibc and musl doesn't have "backtrace"
 # https://github.com/openalpr/openalpr/issues/566#issuecomment-348205549
-FROM ubuntu:22.04 as compiler
+FROM ubuntu:23.04 as compiler
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
 
 ARG INSTALLATION_ROOT=/app
@@ -58,7 +58,7 @@ RUN mkdir /app \
     && make install
 
 # Now that the image is compiled, we can remove most of the image size bloat
-FROM ubuntu:22.04 as app
+FROM ubuntu:23.04 as app
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
