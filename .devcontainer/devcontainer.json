@@ -17,10 +17,12 @@
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/dhoeric/features/hadolint:1": {},
 		"ghcr.io/devcontainers-contrib/features/dive:1": {}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
+	"postCreateCommand": "git pull --prune; sudo apt-get update && sudo apt-get full-upgrade -y",
+	"postStartCommand": "make install"
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
